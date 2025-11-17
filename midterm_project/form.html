@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Prediction Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+        }
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        .result-approved {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result-rejected {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .spinner-border {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2 class="text-center mb-4">Loan Deaful Probability Prediction</h2>
+            <form id="predictionForm">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="person_age" class="form-label">Age *</label>
+                        <input type="number" class="form-control" id="person_age" name="person_age" 
+                               min="20" max="144" value="35" required>
+                        <div class="form-text">Age between 20-144</div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="person_gender" class="form-label">Gender *</label>
+                        <select class="form-select" id="person_gender" name="person_gender" required>
+                            <option value="">Select gender</option>
+                            <option value="male" selected>Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="person_education" class="form-label">Education Level *</label>
+                        <select class="form-select" id="person_education" name="person_education" required>
+                            <option value="">Select education</option>
+                            <option value="High School">High School</option>
+                            <option value="Associate">Associate</option>
+                            <option value="Bachelor" selected>Bachelor</option>
+                            <option value="Master">Master</option>
+                            <option value="PhD">PhD</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="person_income" class="form-label">Annual Income ($) *</label>
+                        <input type="number" class="form-control" id="person_income" name="person_income" 
+                               min="0.01" step="0.01" value="75000" required>
+                        <div class="form-text">Must be positive</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="person_emp_exp" class="form-label">Employment Experience (years) *</label>
+                        <input type="number" class="form-control" id="person_emp_exp" name="person_emp_exp" 
+                               min="0" value="10" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="person_home_ownership" class="form-label">Home Ownership *</label>
+                        <select class="form-select" id="person_home_ownership" name="person_home_ownership" required>
+                            <option value="">Select ownership</option>
+                            <option value="RENT" selected>Rent</option>
+                            <option value="OWN">Own</option>
+                            <option value="MORTGAGE">Mortgage</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="loan_amnt" class="form-label">Loan Amount ($) *</label>
+                        <input type="number" class="form-control" id="loan_amnt" name="loan_amnt" 
+                               min="0.01" step="0.01" value="15000" required>
+                        <div class="form-text">Must be positive</div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="loan_intent" class="form-label">Loan Purpose *</label>
+                        <select class="form-select" id="loan_intent" name="loan_intent" required>
+                            <option value="">Select purpose</option>
+                            <option value="EDUCATION" selected>Education</option>
+                            <option value="MEDICAL">Medical</option>
+                            <option value="VENTURE">Venture</option>
+                            <option value="PERSONAL">Personal</option>
+                            <option value="DEBTCONSOLIDATION">Debt Consolidation</option>
+                            <option value="HOMEIMPROVEMENT">Home Improvement</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="loan_int_rate" class="form-label">Interest Rate (%) *</label>
+                        <input type="number" class="form-control" id="loan_int_rate" name="loan_int_rate" 
+                               min="0" max="100" step="0.01" value="5.5" required>
+                        <div class="form-text">Between 0-100%</div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="loan_percent_income" class="form-label">Loan to Income Ratio *</label>
+                        <input type="number" class="form-control" id="loan_percent_income" name="loan_percent_income" 
+                               min="0" max="1" step="0.01" value="0.2" required>
+                        <div class="form-text">Between 0-1</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="cb_person_cred_hist_length" class="form-label">Credit History Length (years) *</label>
+                        <input type="number" class="form-control" id="cb_person_cred_hist_length" 
+                               name="cb_person_cred_hist_length" min="0" value="8" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="credit_score" class="form-label">Credit Score *</label>
+                        <input type="number" class="form-control" id="credit_score" name="credit_score" 
+                               min="300" max="850" value="720" required>
+                        <div class="form-text">Between 300-850</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="previous_loan_defaults_on_file" class="form-label">Previous Loan Defaults *</label>
+                        <select class="form-select" id="previous_loan_defaults_on_file" 
+                                name="previous_loan_defaults_on_file" required>
+                            <option value="">Select option</option>
+                            <option value="0" selected>No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <span class="button-text">Get Prediction</span>
+                    </button>
+                </div>
+            </form>
+
+            <div id="resultBox" class="result-box">
+                <h4 id="resultTitle"></h4>
+                <p id="resultDetails"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Validation rules
+        const validationRules = {
+            person_age: { min: 20, max: 144, type: 'int' },
+            person_income: { min: 0.01, type: 'float' },
+            person_emp_exp: { min: 0, type: 'int' },
+            loan_amnt: { min: 0.01, type: 'float' },
+            loan_int_rate: { min: 0, max: 100, type: 'float' },
+            loan_percent_income: { min: 0, max: 1, type: 'float' },
+            cb_person_cred_hist_length: { min: 0, type: 'int' },
+            credit_score: { min: 300, max: 850, type: 'int' }
+        };
+
+        // Validate numeric field
+        function validateField(fieldName, value) {
+            const rules = validationRules[fieldName];
+            if (!rules) return { valid: true };
+
+            const numValue = rules.type === 'int' ? parseInt(value) : parseFloat(value);
+
+            if (isNaN(numValue)) {
+                return { valid: false, message: `${fieldName} must be a valid number` };
+            }
+
+            if (rules.min !== undefined && numValue < rules.min) {
+                return { valid: false, message: `${fieldName} must be at least ${rules.min}` };
+            }
+
+            if (rules.max !== undefined && numValue > rules.max) {
+                return { valid: false, message: `${fieldName} must be at most ${rules.max}` };
+            }
+
+            return { valid: true };
+        }
+
+        // Show validation error
+        function showFieldError(fieldName, message) {
+            const field = document.getElementById(fieldName);
+            field.classList.add('is-invalid');
+            
+            let errorDiv = field.parentElement.querySelector('.invalid-feedback');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'invalid-feedback';
+                field.parentElement.appendChild(errorDiv);
+            }
+            errorDiv.textContent = message;
+        }
+
+        // Clear validation error
+        function clearFieldError(fieldName) {
+            const field = document.getElementById(fieldName);
+            field.classList.remove('is-invalid');
+            
+            const errorDiv = field.parentElement.querySelector('.invalid-feedback');
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+        }
+
+        // Add real-time validation listeners
+        Object.keys(validationRules).forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            if (field) {
+                field.addEventListener('blur', function() {
+                    const validation = validateField(fieldName, this.value);
+                    if (!validation.valid) {
+                        showFieldError(fieldName, validation.message);
+                    } else {
+                        clearFieldError(fieldName);
+                    }
+                });
+
+                field.addEventListener('input', function() {
+                    if (field.classList.contains('is-invalid')) {
+                        const validation = validateField(fieldName, this.value);
+                        if (validation.valid) {
+                            clearFieldError(fieldName);
+                        }
+                    }
+                });
+            }
+        });
+
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const spinner = document.querySelector('.spinner-border');
+            const buttonText = document.querySelector('.button-text');
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const resultBox = document.getElementById('resultBox');
+            
+            // Clear all previous errors
+            Object.keys(validationRules).forEach(fieldName => {
+                clearFieldError(fieldName);
+            });
+            
+            // Gather form data and validate
+            const formData = new FormData(e.target);
+            const data = {};
+            let hasErrors = false;
+            
+            formData.forEach((value, key) => {
+                // Validate numeric fields
+                if (validationRules[key]) {
+                    const validation = validateField(key, value);
+                    if (!validation.valid) {
+                        showFieldError(key, validation.message);
+                        hasErrors = true;
+                        return;
+                    }
+                }
+
+                // Convert numeric fields
+                if (['person_age', 'person_emp_exp', 'cb_person_cred_hist_length', 
+                     'credit_score', 'previous_loan_defaults_on_file'].includes(key)) {
+                    data[key] = parseInt(value);
+                } else if (['person_income', 'loan_amnt', 'loan_int_rate', 'loan_percent_income'].includes(key)) {
+                    data[key] = parseFloat(value);
+                } else {
+                    data[key] = value;
+                }
+            });
+
+            // Stop if validation errors exist
+            if (hasErrors) {
+                resultBox.style.display = 'block';
+                resultBox.className = 'result-box result-rejected';
+                document.getElementById('resultTitle').textContent = 'Validation Error';
+                document.getElementById('resultDetails').textContent = 'Please fix the errors in the form before submitting.';
+                return;
+            }
+            
+            // Show loading state
+            spinner.style.display = 'inline-block';
+            buttonText.textContent = 'Processing...';
+            submitBtn.disabled = true;
+            resultBox.style.display = 'none';
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Prediction failed');
+                }
+                
+                const result = await response.json();
+                
+                // Display result
+                resultBox.style.display = 'block';
+                
+                if (!result.prediction) {
+                    resultBox.className = 'result-box result-approved';
+                    document.getElementById('resultTitle').textContent = '✓ Loan Approved';
+                    document.getElementById('resultDetails').innerHTML = 
+                        `<strong>Probability:</strong> ${(result.probability * 100).toFixed(2)}%<br>
+                         <strong>Threshold:</strong> ${result.threshold}<br>
+                         <strong>Prediction Class:</strong> ${result.prediction_class}`;
+                } else {
+                    resultBox.className = 'result-box result-rejected';
+                    document.getElementById('resultTitle').textContent = '✗ Loan Rejected';
+                    document.getElementById('resultDetails').innerHTML = 
+                        `<strong>Probability:</strong> ${(result.probability * 100).toFixed(2)}%<br>
+                         <strong>Threshold:</strong> ${result.threshold}<br>
+                         <strong>Prediction Class:</strong> ${result.prediction_class}`;
+                }
+                
+                // Scroll to result
+                resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+            } catch (error) {
+                resultBox.style.display = 'block';
+                resultBox.className = 'result-box result-rejected';
+                document.getElementById('resultTitle').textContent = 'Error';
+                document.getElementById('resultDetails').textContent = error.message;
+            } finally {
+                // Reset button state
+                spinner.style.display = 'none';
+                buttonText.textContent = 'Get Prediction';
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

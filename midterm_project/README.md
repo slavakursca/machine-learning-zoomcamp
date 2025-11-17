@@ -171,6 +171,24 @@ API runs at: `http://localhost:9696`
 
 ------------------------------------------------------------------------
 
+## 🌐 Cloud Deployment (DigitalOcean)
+
+The API is fully deployed and accessible online via DigitalOcean’s App Platform:
+
+**Live Application:**  
+**👉 https://loan-default-api-app-hrbsh.ondigitalocean.app/**
+
+This cloud-hosted version exposes the same production-ready machine learning model used locally, allowing real-time inference directly over the internet.
+
+**Interactive Demo Form:**
+**👉 https://loan-default-api-app-hrbsh.ondigitalocean.app/form**
+
+### Available Endpoints
+
+- **GET `/health`** — Health-check endpoint to verify the service is running  
+- **POST `/predict`** — Main ML inference endpoint returning default probability and prediction  
+- **GET `/form`** — Simple interactive form for manually submitting applicant data and testing predictions
+
 ## 🔌 API Documentation
 
 ### Endpoints

@@ -1,8 +1,10 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field, field_validator
 from predict import ModelPredictor
 import uvicorn
 from typing import Literal
+from pathlib import Path
 
 # Initialize FastAPI app
 app = FastAPI(title="ML Model API", version="1.0.0")
@@ -101,7 +103,8 @@ async def root():
         "message": "ML Model API",
         "endpoints": {
             "health": "/health",
-            "predict": "/predict"
+            "predict": "/predict",
+            "form": "/form"
         }
     }
 
@@ -109,6 +112,16 @@ async def root():
 async def health_check():
     """Health check endpoint"""
     return {"status": "ok"}
+
+
+@app.get("/form", response_class=HTMLResponse)
+async def form():
+    """Render prediction form"""
+    html_file = Path("form.html")
+    if not html_file.exists():
+        raise HTTPException(status_code=404, detail="Form template not found")
+    
+    return HTMLResponse(content=html_file.read_text())
 
 @app.post("/predict", response_model=PredictionResponse)
 async def predict(request: PredictionRequest):

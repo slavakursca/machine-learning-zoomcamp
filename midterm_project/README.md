@@ -22,14 +22,14 @@ on demographic, financial, and credit history features.
 Financial institutions must determine which loan applicants are likely
 to default. Incorrect decisions lead to:
 
--   High financial losses (false negatives)\
+-   High financial losses (false negatives)
 -   Missed business opportunities (false positives)
 
 Objective:
 
--   Predict default probability\
+-   Predict default probability
 -   Convert probability into a binary decision using an optimized
-    threshold\
+    threshold
 -   Serve results in real time via an API
 
 This project demonstrates a production-ready approach to credit risk
@@ -39,8 +39,8 @@ scoring.
 
 ## 📊 Dataset Description
 
--   **Rows:** 45,000\
--   **Columns:** 14\
+-   **Rows:** 45,000
+-   **Columns:** 14
 -   **Target:** `loan_status` (1 = Default, 0 = Paid)
 
 Includes demographic attributes, financial indicators, and credit
@@ -48,38 +48,22 @@ history features.
 
 ### Feature Summary
 
-  -----------------------------------------------------------------------------
-  Feature                          Type                 Notes
-  -------------------------------- -------------------- -----------------------
-  person_age                       int                  20--144 (outliers
-                                                        addressed)
+| Feature                           | Type         | Notes                               |
+|-----------------------------------|--------------|--------------------------------------|
+| person_age                        | int          | 20–144 (outliers addressed)          |
+| person_gender                     | categorical  | male / female                        |
+| person_education                  | categorical  | HS, Bachelor, Master, PhD            |
+| person_income                     | float        | annual income                        |
+| person_emp_exp                    | int          | years of employment                  |
+| person_home_ownership             | categorical  | RENT, OWN, MORTGAGE                  |
+| loan_amnt                         | float        | loan request amount                  |
+| loan_intent                       | categorical  | EDUCATION, MEDICAL, VENTURE, etc.    |
+| loan_int_rate                     | float        | interest rate                        |
+| loan_percent_income               | float        | loan amount / income                 |
+| cb_person_cred_hist_length        | int          | credit history length                |
+| credit_score                      | int          | credit score                         |
+| previous_loan_defaults_on_file    | categorical → binary | Yes/No converted to 1/0      |
 
-  person_gender                    categorical          male/female
-
-  person_education                 categorical          HS, Bachelor, Master,
-                                                        PhD
-
-  person_income                    float                annual income
-
-  person_emp_exp                   int                  years of employment
-
-  person_home_ownership            categorical          RENT, OWN, MORTGAGE
-
-  loan_amnt                        float                loan request amount
-
-  loan_intent                      categorical          EDUCATION, MEDICAL,
-                                                        VENTURE, etc.
-
-  loan_int_rate                    float                interest rate
-
-  loan_percent_income              float                loan amount / income
-
-  cb_person_cred_hist_length       int                  credit history length
-
-  credit_score                     int                  credit score
-
-  previous_loan_defaults_on_file   categorical → binary Yes/No converted to 1/0
-  -----------------------------------------------------------------------------
 
 Dataset link: [Kaggle
 Dataset](https://www.kaggle.com/datasets/sumit12100012/loan-approval-classification)
@@ -137,15 +121,15 @@ Stored along with:
 
 Saved in: `midterm_model.bin`
 
-### 4. Final Performance (Example)
+### 4. Final Performance
 
-| Metric     | Score |
-|------------|-------|
-| Accuracy   | ~0.82 |
-| Precision  | ~0.78 |
-| Recall     | ~0.75 |
-| F1-Score   | ~0.76 |
-| AUC-ROC    | ~0.86 |
+| Metric     | Score   |
+|------------|---------|
+| Accuracy   | ~0.9311 |
+| Precision  | ~0.93   |
+| Recall     | ~0.93   |
+| F1-Score   | ~0.8374 |
+| AUC-ROC    | ~0.9748 |
 
 ------------------------------------------------------------------------
 

@@ -138,7 +138,7 @@ Saved in: `midterm_model.bin`
 ```mermaid
 graph LR
     A[Client Sends JSON Request] --> B[FastAPI Endpoint /predict]
-    B --> C[ModelPredictor Class (predict.py)]
+    B --> C[ModelPredictor Class - predict.py]
     C --> D[Load Model + DictVectorizer]
     D --> E[Compute Probability]
     E --> F[Apply Tuned Threshold]

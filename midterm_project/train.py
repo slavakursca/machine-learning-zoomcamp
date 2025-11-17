@@ -69,19 +69,19 @@ df = df[df['person_age'] < 72]
 df = df[df['person_income'] < 1000000]
 
 
-# In[125]:
+# In[10]:
 
 
 df['previous_loan_defaults_on_file'] = df['previous_loan_defaults_on_file'].replace(['No', 'Yes'], [0, 1]).astype(int)
 
 
-# In[126]:
+# In[11]:
 
 
 pd.set_option('display.float_format', '{:.2f}'.format)
 
 
-# In[127]:
+# In[12]:
 
 
 df.describe()
@@ -177,7 +177,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, f1_score, roc_auc_score
 
 
-# In[76]:
+# In[26]:
 
 
 def train_model_and_get_metrics(df_train, y_train, df_val, y_val, features_list, c, class_weight='balanced'):
@@ -224,7 +224,7 @@ def train_model_and_get_metrics(df_train, y_train, df_val, y_val, features_list,
     return model_final
 
 
-# In[91]:
+# In[27]:
 
 
 def train_model_and_get_metrics_dynamic(df_train, y_train, df_val, y_val, features_list, 
@@ -310,7 +310,7 @@ def train_model_and_get_metrics_dynamic(df_train, y_train, df_val, y_val, featur
     return model_final, dv_train, best_threshold
 
 
-# In[92]:
+# In[28]:
 
 
 numerical_for_regression = ["person_age", "person_income", "loan_amnt", "loan_int_rate", "loan_percent_income", "credit_score", "previous_loan_defaults_on_file"]
@@ -318,14 +318,14 @@ numerical_for_regression = ["person_age", "person_income", "loan_amnt", "loan_in
 #numerical_for_regression = ["cb_person_cred_hist_length", "person_income", "loan_amnt", "loan_int_rate", "loan_percent_income", "credit_score", "previous_loan_defaults_on_file"]
 
 
-# In[93]:
+# In[29]:
 
 
 all_features = categorical + numerical
 all_features
 
 
-# In[94]:
+# In[30]:
 
 
 all_features = categorical + numerical
@@ -333,31 +333,25 @@ all_features_for_regression = categorical + numerical_for_regression
 train_model_and_get_metrics_dynamic(df_train, y_train, df_val, y_val, all_features, class_weight='balanced')
 
 
-# In[96]:
+# In[31]:
 
 
 train_model_and_get_metrics_dynamic(df_train, y_train, df_val, y_val, all_features, class_weight=None)
 
 
-# In[97]:
+# In[32]:
 
 
 train_model_and_get_metrics_dynamic(df_train, y_train, df_val, y_val, all_features_for_regression, class_weight='balanced')
 
 
-# In[100]:
+# In[33]:
 
 
 train_model_and_get_metrics_dynamic(df_train, y_train, df_val, y_val, all_features_for_regression, class_weight=None)
 
 
-# In[41]:
-
-
-#!jupyter nbconvert --to script Midterm-project.ipynb
-
-
-# In[158]:
+# In[34]:
 
 
 def train_model_and_get_metrics(df_train, y_train, df_val, y_val, features_list, 
@@ -459,43 +453,43 @@ def train_model_and_get_metrics(df_train, y_train, df_val, y_val, features_list,
     return model_final, dv_train, best_threshold
 
 
-# In[149]:
+# In[35]:
 
 
 log_regression_model, log_regression_dv, log_regression_threshold = train_model_and_get_metrics(df_train, y_train, df_val, y_val, all_features)
 
 
-# In[104]:
+# In[36]:
 
 
 train_model_and_get_metrics(df_train, y_train, df_val, y_val, all_features_for_regression)
 
 
-# In[106]:
+# In[37]:
 
 
 train_model_and_get_metrics(df_train, y_train, df_val, y_val, all_features_for_regression, optimize_for='roc_auc')
 
 
-# In[107]:
+# In[38]:
 
 
 train_model_and_get_metrics(df_train_full, y_train_full, df_test, y_test, all_features_for_regression)
 
 
-# In[108]:
+# In[39]:
 
 
 train_model_and_get_metrics(df_train_full, y_train_full, df_test, y_test, all_features_for_regression, optimize_for='roc_auc')
 
 
-# In[110]:
+# In[40]:
 
 
 from sklearn.ensemble import RandomForestClassifier
 
 
-# In[113]:
+# In[41]:
 
 
 def train_random_forest_and_get_metrics(df_train, y_train, df_val, y_val, features_list,
@@ -646,19 +640,19 @@ def train_random_forest_and_get_metrics(df_train, y_train, df_val, y_val, featur
     return model_final, dv_train, best_threshold
 
 
-# In[123]:
+# In[42]:
 
 
 random_forest_model, random_forest_dv, random_forest_threshold = train_random_forest_and_get_metrics(df_train, y_train, df_val, y_val, all_features)
 
 
-# In[115]:
+# In[43]:
 
 
 from sklearn.tree import DecisionTreeClassifier
 
 
-# In[120]:
+# In[44]:
 
 
 def train_decision_tree_and_get_metrics(df_train, y_train, df_val, y_val, features_list,
@@ -782,13 +776,13 @@ def train_decision_tree_and_get_metrics(df_train, y_train, df_val, y_val, featur
     return model_final, dv_train, best_threshold
 
 
-# In[124]:
+# In[45]:
 
 
 decision_tree_model, decision_tree_dv, decision_tree_treshold = train_decision_tree_and_get_metrics(df_train, y_train, df_val, y_val, all_features)
 
 
-# In[132]:
+# In[46]:
 
 
 X_test = decision_tree_dv.transform(df_test.to_dict(orient='records'))
@@ -796,7 +790,7 @@ y_test_pred_proba = decision_tree_model.predict_proba(X_test)[:, 1]
 y_pred_final = (y_test_pred_proba >= decision_tree_treshold).astype(int)
 
 
-# In[143]:
+# In[47]:
 
 
 print(f"F1 Score: {f1_score(y_test, y_pred_final):.4f}")
@@ -805,19 +799,19 @@ print("\nClassification Report:")
 print(classification_report(y_test, y_pred_final))
 
 
-# In[144]:
+# In[48]:
 
 
 from sklearn.metrics import accuracy_score
 
 
-# In[145]:
+# In[49]:
 
 
 accuracy_score(y_test, y_pred_final)
 
 
-# In[146]:
+# In[50]:
 
 
 X_test = random_forest_dv.transform(df_test.to_dict(orient='records'))
@@ -825,7 +819,7 @@ y_test_pred_proba = random_forest_model.predict_proba(X_test)[:, 1]
 y_pred_final = (y_test_pred_proba >= random_forest_threshold).astype(int)
 
 
-# In[147]:
+# In[51]:
 
 
 print(f"F1 Score: {f1_score(y_test, y_pred_final):.4f}")
@@ -834,13 +828,13 @@ print("\nClassification Report:")
 print(classification_report(y_test, y_pred_final))
 
 
-# In[148]:
+# In[52]:
 
 
 accuracy_score(y_test, y_pred_final)
 
 
-# In[150]:
+# In[53]:
 
 
 X_test = log_regression_dv.transform(df_test.to_dict(orient='records'))
@@ -848,7 +842,7 @@ y_test_pred_proba = log_regression_model.predict_proba(X_test)[:, 1]
 y_pred_final = (y_test_pred_proba >= log_regression_threshold).astype(int)
 
 
-# In[151]:
+# In[54]:
 
 
 print(f"F1 Score: {f1_score(y_test, y_pred_final):.4f}")
@@ -857,7 +851,7 @@ print("\nClassification Report:")
 print(classification_report(y_test, y_pred_final))
 
 
-# In[152]:
+# In[55]:
 
 
 accuracy_score(y_test, y_pred_final)
@@ -865,13 +859,13 @@ accuracy_score(y_test, y_pred_final)
 
 # Final model training
 
-# In[823]:
+# In[ ]:
 
 
 random_forest_model, random_forest_dv, random_forest_threshold = train_random_forest_and_get_metrics(df_train_full, y_train_full, df_test, y_test, all_features)
 
 
-# In[155]:
+# In[ ]:
 
 
 X_test = random_forest_dv.transform(df_test.to_dict(orient='records'))
@@ -879,7 +873,7 @@ y_test_pred_proba = random_forest_model.predict_proba(X_test)[:, 1]
 y_pred_final = (y_test_pred_proba >= random_forest_threshold).astype(int)
 
 
-# In[156]:
+# In[ ]:
 
 
 print(f"F1 Score: {f1_score(y_test, y_pred_final):.4f}")
@@ -888,23 +882,29 @@ print("\nClassification Report:")
 print(classification_report(y_test, y_pred_final))
 
 
-# In[157]:
+# In[ ]:
 
 
 accuracy_score(y_test, y_pred_final)
 
 
-# In[821]:
+# In[ ]:
 
 
 import pickle
 
 
-# In[822]:
+# In[ ]:
 
 
 with open('midterm_model.bin', 'wb') as f_out:
     pickle.dump((random_forest_model, random_forest_dv, random_forest_threshold), f_out)
+
+
+# In[ ]:
+
+
+get_ipython().system('jupyter nbconvert --to script Midterm-project.ipynb')
 
 
 # In[ ]:

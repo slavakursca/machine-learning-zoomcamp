@@ -1,4 +1,4 @@
-# 📘 Loan Default Probability Prediction --- Machine Learning API
+# 📘 Loan Default Probability Prediction - ML API Service
 
 This project implements an end-to-end loan default risk prediction
 system.
@@ -175,11 +175,11 @@ API runs at: `http://localhost:9696`
 
 ### Endpoints
 
-  Method   Endpoint   Description
-  -------- ---------- ---------------------
-  GET      /          Welcome message
-  GET      /health    Health check
-  POST     /predict   Generate prediction
+| Method | Endpoint | Description        |
+|--------|----------|--------------------|
+| GET    | /        | Welcome message    |
+| GET    | /health  | Health check       |
+| POST   | /predict | Generate prediction |
 
 ### Request Example
 

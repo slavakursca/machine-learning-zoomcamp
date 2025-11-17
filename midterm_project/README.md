@@ -116,18 +116,12 @@ Dataset](https://www.kaggle.com/datasets/sumit12100012/loan-approval-classificat
 
 ### 2. Models Evaluated
 
-  ------------------------------------------------------------------------
-  Model                      Pros                   Cons
-  -------------------------- ---------------------- ----------------------
-  Logistic Regression        Interpretable          Underfits nonlinear
-                                                    relations
+| Model                 | Pros                                     | Cons                             |
+|-----------------------|------------------------------------------|----------------------------------|
+| Logistic Regression   | Interpretable                            | Underfits nonlinear relations    |
+| Decision Tree         | Captures interactions                    | Overfits easily                  |
+| Random Forest (Selected) | Best accuracy, robust, handles mixed features | Larger model size                |
 
-  Decision Tree              Captures interactions  Overfits
-
-  **Random Forest            Robust, strong         Larger model size
-  (Selected)**               accuracy, handles      
-                             mixed features         
-  ------------------------------------------------------------------------
 
 **Random Forest chosen** for stable performance and good probability
 calibration.
@@ -145,13 +139,13 @@ Saved in: `midterm_model.bin`
 
 ### 4. Final Performance (Example)
 
-  Metric      Score
-  ----------- --------
-  Accuracy    \~0.82
-  Precision   \~0.78
-  Recall      \~0.75
-  F1          \~0.76
-  AUC         \~0.86
+| Metric     | Score |
+|------------|-------|
+| Accuracy   | ~0.82 |
+| Precision  | ~0.78 |
+| Recall     | ~0.75 |
+| F1-Score   | ~0.76 |
+| AUC-ROC    | ~0.86 |
 
 ------------------------------------------------------------------------
 

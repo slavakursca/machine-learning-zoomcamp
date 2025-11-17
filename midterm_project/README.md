@@ -74,7 +74,7 @@ Dataset](https://www.kaggle.com/datasets/sumit12100012/loan-approval-classificat
 
 ### Key Observations
 
--   Age distribution concentrated 25--55; outliers above 100 removed
+-   Age distribution concentrated 25--55; outliers above 71 removed
 -   Income heavily right-tailed; extreme values filtered
 -   Credit score strongly negative correlated with default
 -   `loan_percent_income` is one of strongest predictors
@@ -135,14 +135,14 @@ Saved in: `midterm_model.bin`
 
 ## 🏛️ API Service Architecture
 
-```
-    graph LR
-        A[Client Sends JSON Request] --> B[FastAPI Endpoint /predict]
-        B --> C[ModelPredictor Class (predict.py)]
-        C --> D[Load Model + DictVectorizer]
-        C --> E[Compute Probability]
-        E --> F[Apply Tuned Threshold]
-        F --> G[Return JSON Response]
+```mermaid
+graph LR
+    A[Client Sends JSON Request] --> B[FastAPI Endpoint /predict]
+    B --> C[ModelPredictor Class (predict.py)]
+    C --> D[Load Model + DictVectorizer]
+    D --> E[Compute Probability]
+    E --> F[Apply Tuned Threshold]
+    F --> G[Return JSON Response]
 ```
 
 ------------------------------------------------------------------------

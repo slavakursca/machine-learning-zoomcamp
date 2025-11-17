@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  loan-default-prediction-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: loan-default-prediction-api
+    ports:
+      - "9696:9696"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9696/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.example.description=Loan Default Prediction API"
+      - "com.example.version=1.0.0"

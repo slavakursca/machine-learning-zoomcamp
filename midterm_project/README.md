@@ -240,4 +240,3 @@ This cloud-hosted version exposes the same production-ready machine learning mod
 
 -   Feature importance stability checks
 -   Stronger Pydantic input schemas
--   Cloud deployment (AWS ECS/EC2, Render, Railway)

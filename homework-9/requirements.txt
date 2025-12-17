@@ -1,0 +1,4 @@
+onnxruntime
+Pillow
+torchvision # Although torchvision is used, ensure it's installed or replace with simpler image processing if possible for lighter images
+numpy

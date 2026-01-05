@@ -15,11 +15,9 @@ The solution includes model training, evaluation, and a production-ready inferen
     fine-tuning → serialization)
 -   FastAPI inference service exposing a `/classify` endpoint
 -   Dockerized deployment for reproducible and portable serving
--   Clean REST interface returning both probability and binary
-    classification
+-   Clean REST interface returning both room class and
+    classification scores
 
-The model predicts the probability that a borrower will default, based
-on demographic, financial, and credit history features.
 
 ------------------------------------------------------------------------
 
@@ -229,21 +227,6 @@ Overall Accuracy: 0.85
 | **Macro Avg**    | **0.85**  | **0.85** | **0.85** | 275     |
 | **Weighted Avg** | **0.85**  | **0.85** | **0.85** | 275     |
 
-
-------------------------------------------------------------------------
-
-## 🏛️ API Service Architecture
-
-```mermaid
-graph LR
-    A[Client Sends JSON Request] --> B[FastAPI Endpoint /predict]
-    B --> C[ModelPredictor Class - predict.py]
-    C --> D[Load Model + DictVectorizer]
-    D --> E[Compute Probability]
-    E --> F[Apply Tuned Threshold]
-    F --> G[Return JSON Response]
-```
-
 ------------------------------------------------------------------------
 
 ## 🚀 Running the Project
@@ -270,23 +253,10 @@ API runs at: `http://localhost:9696`
 
 ------------------------------------------------------------------------
 
-## 🌐 Cloud Deployment (DigitalOcean)
-
-The API is fully deployed and accessible online via DigitalOcean’s App Platform:
-
-**Live Application:**  
-**👉 https://loan-default-api-app-hrbsh.ondigitalocean.app/**
-
-This cloud-hosted version exposes the same production-ready machine learning model used locally, allowing real-time inference directly over the internet.
-
-**Interactive Demo Form:**
-**👉 https://loan-default-api-app-hrbsh.ondigitalocean.app/form**
-
 ### Available Endpoints
 
 - **GET `/health`** — Health-check endpoint to verify the service is running  
-- **POST `/predict`** — Main ML inference endpoint returning default probability and prediction  
-- **GET `/form`** — Simple interactive form for manually submitting applicant data and testing predictions
+- **POST `/classify`** — Main ML inference endpoint returning default probability and prediction  
 
 ## 🔌 API Documentation
 
@@ -296,33 +266,37 @@ This cloud-hosted version exposes the same production-ready machine learning mod
 |--------|----------|--------------------|
 | GET    | /        | Welcome message    |
 | GET    | /health  | Health check       |
-| POST   | /predict | Generate prediction |
+| POST   | /classify | Classify image    |
 
 ### Request Example
 
     {
-      "person_age": 35,
-      "person_gender": "male",
-      "person_education": "Bachelor",
-      "person_income": 75000,
-      "person_emp_exp": 10,
-      "person_home_ownership": "RENT",
-      "loan_amnt": 15000,
-      "loan_intent": "EDUCATION",
-      "loan_int_rate": 5.5,
-      "loan_percent_income": 0.2,
-      "cb_person_cred_hist_length": 8,
-      "credit_score": 720,
-      "previous_loan_defaults_on_file": 0
+        "image_url": "https://www.ikea.com/ext/ingkadam/m/d8109089b593cb6/original/PH205488.jpg"
     }
 
 ### Response Example
 
     {
-      "prediction": false,
-      "probability": 0.1234,
-      "threshold": 0.34,
-      "prediction_class": 0
+        "class": "bedroom",
+        "confidence": 12.37452507019043,
+        "probabilities": [
+            [
+                "bedroom",
+                12.37452507019043
+            ],
+            [
+                "living_room",
+                -0.6701955795288086
+            ],
+            [
+                "bathroom",
+                -7.406153202056885
+            ],
+            [
+                "kitchen",
+                -9.13115119934082
+            ]
+        ]
     }
 
 ------------------------------------------------------------------------

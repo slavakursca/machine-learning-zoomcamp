@@ -21,8 +21,8 @@ COPY model.py .
 COPY main.py .
 COPY onnx_session.py .
 RUN mkdir /app/train_model
-COPY train_model/roomg_classifier_mobilenet_v3_tunned.onnx/ /app/train_model/roomg_classifier_mobilenet_v3_tunned.onnx
-COPY train_model/roomg_classifier_mobilenet_v3_tunned.onnx.data/ /app/train_model/roomg_classifier_mobilenet_v3_tunned.onnx.data
+COPY train_model/room_classifier_final.onnx/ /app/train_model/room_classifier_final.onnx
+COPY train_model/room_classifier_final.onnx.data/ /app/train_model/room_classifier_final.onnx.data
 
 # Expose port
 EXPOSE 9696

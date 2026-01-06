@@ -204,9 +204,9 @@ Performance Comparison
 
 | Model                 | Accuracy (Validation - Test)     | F1 Score  | Inference Speed | Model Size |
 | --------------------- | -------------------- | --------- | --------------- | ---------- |
-| **EfficientNet-B1**   | 83.95% - 87.27%    | Good   | Good          | 1.1MB + 28.7MB     |
-| **ResNet-18**         | 84.87% - 86.91%    | Good   | Fast            | 114KB + 44.7MB     |
-| **MobileNetV3-Large** | 87.63% - 85.09%    | Good   | Very fast     | 422KB + 16.8MB      |
+| **EfficientNet-B1**   | 83.95% - 87.27%    | Good   | Good          | 1.1MB + 28.7MB  |
+| **ResNet-18**         | 84.87% - 86.91%    | Good   | Fast          | 114KB + 44.7MB  |
+| **MobileNetV3-Large** | 87.63% - 85.09%    | Good   | Very fast     | 422KB + 16.8MB  |
 | **MobileNetV2**       | 84.84% - 85.09%    | Good   | Fastest       | 312KB + 8.9MB   |
 
 

@@ -2,7 +2,7 @@ import os
 import sys
 import onnxruntime as ort
 
-MODEL_PATH = "train_model/roomg_classifier_mobilenet_v3_tunned.onnx"
+MODEL_PATH = "train_model/room_classifier_final.onnx"
 
 class ModelSession:
     """Singleton class to manage ONNX model session"""

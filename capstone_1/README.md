@@ -267,13 +267,6 @@ Overall Accuracy: 0.85
 
 API runs at: `http://localhost:9696`
 
-### 2. Run Locally
-
-    python -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    uvicorn serve:app --host 0.0.0.0 --port 9696
-
 ------------------------------------------------------------------------
 
 ### Available Endpoints
@@ -321,6 +314,29 @@ API runs at: `http://localhost:9696`
             ]
         ]
     }
+
+------------------------------------------------------------------------
+
+## 🌐 Cloud Deployment (HuggingFace Spaces)
+
+The Room Classifier API is fully deployed and accessible online via HuggingFace Spaces:
+
+**Live Application:**  
+**👉 https://stan25-ml-zoomcamp-room-classifier.hf.space/ **
+
+This cloud-hosted version exposes the same production-ready machine learning model used locally, allowing real-time room classification directly over the internet.
+
+### 📡 Usage Examples
+
+```bash
+# Health check
+curl https://stan25-ml-zoomcamp-room-classifier.hf.space/health
+
+# Classify a room image
+curl -X POST "https://stan25-ml-zoomcamp-room-classifier.hf.space/classify" \
+  -H "Content-Type: application/json" \
+  -d '{"image_url": "https://www.ikea.com/ext/ingkadam/m/d8109089b593cb6/original/PH205488.jpg"}'
+```
 
 ------------------------------------------------------------------------
 

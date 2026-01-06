@@ -190,7 +190,6 @@ rm -rf ./SUNRGBD
 
 ### Models Evaluated
 
-
 The following pretrained CNN architectures were fine-tuned for room classification:         
 
 | Model                 | Description                                     | Strengths                                | Weaknesses                |
@@ -212,7 +211,31 @@ Performance Comparison
 
 **MobileNetV3-Large - was chosen** because delivers near-instant inference on mobile/edge devices with balanced accuracy and better living room separation than MobileNetV2, making it ideal for smart home, real estate tagging, and interior design applications.
 
-Saved in: `train_model/mobilenet_v3/roomg_classifier_mobilenet_v3_tunned.onnx`
+How to train model
+```
+# 0. Prepare dataset using previous instructions and navigate train_model folder
+cd train_model
+
+# 1. Install mini-conda https://www.anaconda.com/docs/getting-started/miniconda/install#installing-miniconda
+# Find instruction depend on your OS
+
+# 2. Go to train_model folder
+cd train_model
+
+# 3. Create the environment
+conda env create -f environment.yml
+
+# 4. Once the installation is finished, activate the environment
+conda activate ml-zoomcamp-v2
+
+# 5. Train model and check created files (room_classifier_final.onnx and room_classifier_final.onnx.data)
+python train_model_final.py
+
+# 6. When you're done, deactivate the environment
+conda deactivate
+```
+
+Saved in: `train_model/room_classifier_final.onnx` and `room_classifier_final.onnx.data`
 
 ### 4. Final Model Performance — MobileNetV3-Large
 

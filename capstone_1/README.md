@@ -161,22 +161,47 @@ rm SUNRGBD.zip
 rm -rf ./SUNRGBD
 ```
 
-✅ Final Dataset Characteristics
+## EDA Summary
 
-- Cleaned and validated images
+## Class Distribution
+
+| Class           |     Train | Validation |    Test |     Total | % of total |
+| --------------- | --------: | ---------: | ------: | --------: | ---------: |
+| **Bedroom**     |       435 |        124 |      63 |       622 |      22.9% |
+| **Bathroom**    |       755 |        215 |     109 |     1,079 |      39.7% |
+| **Kitchen**     |       347 |         99 |      50 |       496 |      18.3% |
+| **Living room** |       364 |        104 |      53 |       521 |      19.2% |
+| **Total**       | **1,901** |    **542** | **275** | **2,718** |   **100%** |
+
+
+## Key Findings
+
+**Dataset Strengths**
+- Clean and validated images
 - No corrupted or unreadable files
-- No near-duplicate samples
-- Ready for deep learning pipelines
-- Compatible with PyTorch / TensorFlow loaders
+- No duplicate or near-duplicate samples
+- Real-world indoor scene diversity
+- Ready for production use
 
-🧠 Why This Matters
+**Limitations**
+- Moderate class imbalance (bathroom overrepresented, living room slightly underrepresented)
+- Limited to four room categories
+- Possible bias from public data sources
 
-- This preprocessing ensures:
-- Better model generalization
-- Reduced overfitting
-- Stable training
-- Higher final accuracy
-- Production-ready dataset quality
+**Final Dataset Characteristics**
+- Fully cleaned and validated dataset
+- Stable and consistent class splits
+- Compatible with PyTorch and TensorFlow data loaders
+- Suitable for end-to-end deep learning pipelines
+
+**Impact on Model Training**
+This preprocessing improves:
+- Generalization performance
+- Training stability
+- Overfitting resistance
+- Final accuracy and robustness
+
+Overall, the dataset meets **production-quality standards** for room classification models.
 
 ------------------------------------------------------------------------
 
@@ -342,7 +367,7 @@ curl -X POST "https://stan25-ml-zoomcamp-room-classifier.hf.space/classify" \
 
 ## ⚠️ Limitations
 
--   Trained on public dataset → may not reflect real-world patterns
+-   Trained on public dataset
 -   No fairness/bias review
 -   No CI/CD retraining automation
 
@@ -350,5 +375,6 @@ curl -X POST "https://stan25-ml-zoomcamp-room-classifier.hf.space/classify" \
 
 ## 🛠 Next Steps
 
--   Feature importance stability checks
--   Stronger Pydantic input schemas
+- Model optimization: Apply post-training quantization (INT8) and pruning to further reduce inference time and memory footprint with minimal accuracy loss.
+- Living Room Class Improvement: Reduce bedroom–living room confusion by collecting harder examples, improving labels, and introducing class-specific augmentations.
+- Threshold & Confidence Calibration: Add confidence thresholds or top-2 predictions to handle ambiguous cases in production.

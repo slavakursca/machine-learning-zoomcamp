@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astana Apartment Price Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        input, select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-predict {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #d0d0d0;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            color: white;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .result-item {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .result-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Astana Apartment Price Predictor</h1>
+            <p>Get instant price predictions powered by machine learning</p>
+        </div>
+
+        <div class="form-container">
+            <form id="predictionForm">
+                <!-- Physical Attributes -->
+                <div class="form-section">
+                    <h2>🏗️ Physical Attributes</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="rooms">Number of Rooms *</label>
+                            <input type="number" id="rooms" name="rooms" min="1" max="10" value="2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="area">Total Area (m²) *</label>
+                            <input type="number" id="area" name="area" min="1" max="300" step="0.1" value="65.4" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="living_area">Living Area (m²) *</label>
+                            <input type="number" id="living_area" name="living_area" min="1" max="300" step="0.1" value="46.6" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="kitchen_area">Kitchen Area (m²) *</label>
+                            <input type="number" id="kitchen_area" name="kitchen_area" min="1" max="100" step="0.1" value="10.6" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="floor">Floor Number *</label>
+                            <input type="number" id="floor" name="floor" min="-1" max="50" value="7" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="total_floors">Total Floors *</label>
+                            <input type="number" id="total_floors" name="total_floors" min="-1" max="50" value="12" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ceiling_height">Ceiling Height (m) *</label>
+                            <input type="number" id="ceiling_height" name="ceiling_height" min="2" max="10" step="0.1" value="3.0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="building_age">Building Age (years) *</label>
+                            <input type="number" id="building_age" name="building_age" min="0" max="100" value="1" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="form-section">
+                    <h2>📍 Location</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="district">District *</label>
+                            <select id="district" name="district" required>
+                                <option value="Yesil" selected>Yesil</option>
+                                <option value="Nura">Nura</option>
+                                <option value="Almaty">Almaty</option>
+                                <option value="Saryarka">Saryarka</option>
+                                <option value="Saryshyk">Saryshyk</option>
+                                <option value="Baikonur">Baikonur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="latitude">Latitude *</label>
+                            <input type="number" id="latitude" name="latitude" min="50" max="52" step="0.0001" value="51.1694" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="longitude">Longitude *</label>
+                            <input type="number" id="longitude" name="longitude" min="70" max="73" step="0.0001" value="71.4491" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Building Characteristics -->
+                <div class="form-section">
+                    <h2>🏢 Building Characteristics</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="house_type">Construction Type *</label>
+                            <select id="house_type" name="house_type" required>
+                                <option value="monolithic" selected>Monolithic</option>
+                                <option value="brick">Brick</option>
+                                <option value="panel">Panel</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="condition">Condition *</label>
+                            <select id="condition" name="condition" required>
+                                <option value="new">New</option>
+                                <option value="good" selected>Good</option>
+                                <option value="rough">Rough</option>
+                                <option value="needs_repair">Needs Repair</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amenities -->
+                <div class="form-section">
+                    <h2>✨ Amenities</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="parking">Parking *</label>
+                            <select id="parking" name="parking" required>
+                                <option value="private_parking">Private Parking</option>
+                                <option value="public_parking" selected>Public Parking</option>
+                                <option value="garage">Garage</option>
+                                <option value="no_parking">No Parking</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="furniture">Furniture *</label>
+                            <select id="furniture" name="furniture" required>
+                                <option value="fully_furnished">Fully Furnished</option>
+                                <option value="partially_furnished">Partially Furnished</option>
+                                <option value="unfurnished" selected>Unfurnished</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bathroom_type">Bathroom Type *</label>
+                            <select id="bathroom_type" name="bathroom_type" required>
+                                <option value="combined">Combined</option>
+                                <option value="separate">Separate</option>
+                                <option value="multiple" selected>Multiple</option>
+                                <option value="unknown">Unknown</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bathroom_count">Bathroom Count *</label>
+                            <input type="number" id="bathroom_count" name="bathroom_count" min="0" max="5" value="2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="balcony_type">Balcony Type *</label>
+                            <select id="balcony_type" name="balcony_type" required>
+                                <option value="balcony">Balcony</option>
+                                <option value="loggia">Loggia</option>
+                                <option value="multiple" selected>Multiple</option>
+                                <option value="unknown">Unknown</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="security_high">High Security</label>
+                            <select id="security_high" name="security_high" required>
+                                <option value="0">No</option>
+                                <option value="1" selected>Yes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="wooden_floor">Wooden Floors</label>
+                            <select id="wooden_floor" name="wooden_floor" required>
+                                <option value="0" selected>No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="has_window_grills">Window Grills</label>
+                            <select id="has_window_grills" name="has_window_grills" required>
+                                <option value="0" selected>No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden calculated fields -->
+                <input type="hidden" id="floor_relative" name="floor_relative">
+                <input type="hidden" id="living_ratio" name="living_ratio">
+                <input type="hidden" id="kitchen_ratio" name="kitchen_ratio">
+
+                <div class="btn-container">
+                    <button type="submit" class="btn-predict">🔮 Predict Price</button>
+                    <button type="reset" class="btn-reset">🔄 Reset Form</button>
+                </div>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Calculating price...</p>
+            </div>
+
+            <div class="error" id="error"></div>
+
+            <div class="result" id="result">
+                <h3>💰 Prediction Results</h3>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Predicted Price</div>
+                        <div class="result-value" id="predicted_price">-</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Price per m²</div>
+                        <div class="result-value" id="price_per_m2">-</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Category</div>
+                        <div class="result-value" id="price_category">-</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Confidence Range</div>
+                        <div class="result-value" id="confidence_range">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Calculate derived features
+            const area = parseFloat(document.getElementById('area').value);
+            const living_area = parseFloat(document.getElementById('living_area').value);
+            const kitchen_area = parseFloat(document.getElementById('kitchen_area').value);
+            const floor = parseInt(document.getElementById('floor').value);
+            const total_floors = parseInt(document.getElementById('total_floors').value);
+
+            document.getElementById('floor_relative').value = total_floors > 0 ? (floor / total_floors).toFixed(6) : 1.0;
+            document.getElementById('living_ratio').value = (living_area / area).toFixed(6);
+            document.getElementById('kitchen_ratio').value = (kitchen_area / area).toFixed(6);
+
+            // Gather form data
+            const formData = new FormData(e.target);
+            const data = {};
+
+            // Convert to appropriate types
+            formData.forEach((value, key) => {
+                if (['rooms', 'floor', 'total_floors', 'building_age', 'bathroom_count', 'has_window_grills', 'security_high', 'wooden_floor'].includes(key)) {
+                    data[key] = parseInt(value);
+                } else if (['area', 'living_area', 'kitchen_area', 'ceiling_height', 'latitude', 'longitude', 'floor_relative', 'living_ratio', 'kitchen_ratio'].includes(key)) {
+                    data[key] = parseFloat(value);
+                } else {
+                    data[key] = value;
+                }
+            });
+
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('result').classList.remove('show');
+            document.getElementById('error').classList.remove('show');
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                // Display results
+                document.getElementById('predicted_price').textContent = '$' + result.predicted_price_usd.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                document.getElementById('price_per_m2').textContent = '$' + result.price_per_m2.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                document.getElementById('price_category').textContent = result.price_category.replace('_', ' ').toUpperCase();
+                document.getElementById('confidence_range').textContent =
+                    '$' + result.confidence_interval_95.lower.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
+                    ' - $' + result.confidence_interval_95.upper.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+                document.getElementById('result').classList.add('show');
+
+            } catch (error) {
+                document.getElementById('error').textContent = 'Error: ' + error.message;
+                document.getElementById('error').classList.add('show');
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

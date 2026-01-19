@@ -164,7 +164,7 @@ Three gradient boosting algorithms evaluated:
 
 ### 3. Hyperparameter Optimization
 
-**Framework:** Optuna with 25 trials per model per metric
+**Framework:** Optuna with 100 trials per model per metric
 
 **Dual-Metric Strategy:**
 - Optimize separately for RMSE (financial accuracy)
@@ -202,16 +202,19 @@ Three gradient boosting algorithms evaluated:
 
 **Optimal Hyperparameters:**
 ```python
-{
-    'n_estimators': 2500,
-    'learning_rate': 0.022,
-    'max_depth': 8,
-    'min_child_weight': 7,
-    'subsample': 0.71,
-    'colsample_bytree': 0.60,
-    'reg_alpha': 2.22e-05,
-    'reg_lambda': 0.037,
-    'gamma': 1.49e-08
+optimal_params = {
+    "colsample_bytree": 0.6174243195963651,
+    "gamma": 0.00029194695300892537,
+    "learning_rate": 0.025072744653519028,
+    "max_depth": 8,
+    "min_child_weight": 3,
+    "n_estimators": 2000,
+    "reg_alpha": 0.017313707755127073,
+    "reg_lambda": 0.07549915003331413,
+    "subsample": 0.8978305041846237,
+    "random_state": 42,
+    "tree_method": 'hist',
+    "early_stopping_rounds": 50
 }
 ```
 
@@ -219,19 +222,18 @@ Three gradient boosting algorithms evaluated:
 
 | Metric | Value |
 |--------|-------|
-| RMSE | $14,905 |
-| MAE | $8,546 |
-| R² | 0.9175 |
-| MAPE | 9.48% |
+| RMSE | $14,781.55 |
+| R² | 0.9189 |
+| MAPE | 9.27% |
 
 **Error Analysis by Price Segment:**
 
 | Price Range | Mean Absolute Error | Mean Absolute % Error |
-|-------------|--------------------|-----------------------|
-| < $50k | $3,341 | 9.20% |
-| $50-80k | $5,543 | 8.61% |
-| $80-110k | $8,964 | 9.70% |
-| > $110k | $19,678 | 11.12% |
+|-------------|---------------------|-----------------------|
+| < $50k | $3,399              | 9.33%                 |
+| $50-80k | $5,328              | 8.29%                 |
+| $80-110k | $8,681              | 9.39%                 |
+| > $110k | $19,316             | 10.81%                |
 
 **Key Insights:**
 - Model performs consistently across price ranges
@@ -245,14 +247,14 @@ Three gradient boosting algorithms evaluated:
 
 ### All Optimized Models
 
-| Model | Optimized For | Test RMSE | Test R² | Test MAPE |
-|-------|---------------|-----------|---------|-----------|
-| **XGBoost_RMSE** | **RMSE** | **$14,905** | **0.9175** | **9.48%** |
-| XGBoost_MAPE | MAPE | $15,267 | 0.9135 | 9.42% |
-| LightGBM_RMSE | RMSE | $15,341 | 0.9126 | 9.67% |
-| LightGBM_MAPE | MAPE | $15,428 | 0.9116 | 9.58% |
-| CatBoost_RMSE | RMSE | $15,259 | 0.9135 | 9.97% |
-| CatBoost_MAPE | MAPE | $15,384 | 0.9121 | 9.85% |
+| Model | Optimized_For | RMSE | R² | MAPE (%) |
+| :--- | :--- | :--- | :--- | :--- |
+| XGBoost_RMSE | RMSE | 14965.941129 | 0.916823 | 9.336905 |
+| XGBoost_MAPE | MAPE | 14757.846477 | 0.919120 | 9.245500 |
+| LightGBM_RMSE | RMSE | 15124.214839 | 0.915055 | 9.593321 |
+| LightGBM_MAPE | MAPE | 15036.856976 | 0.916033 | 9.225793 |
+| CatBoost_RMSE | RMSE | 14817.238706 | 0.918468 | 9.525816 |
+| CatBoost_MAPE | MAPE | 14815.892530 | 0.918483 | 9.554846 |
 
 **Conclusion:** XGBoost optimized for RMSE provides the best overall performance with lowest error and highest R².
 
@@ -361,6 +363,83 @@ Run `train-model.ipynb` to:
 
 ---
 
+## 🚀 Running the Project
+
+### 1. Run with Docker (recommended)
+
+**Using docker-compose**
+
+    docker-compose up -d
+
+**Manual build/run**
+
+    docker build -t astana-price-api .
+    docker run -p 9696:9696 astana-price-api
+
+API runs at: `http://localhost:9696`
+
+### 2. Run Locally
+
+    python -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+    uvicorn serve:app --host 0.0.0.0 --port 9696
+
+------------------------------------------------------------------------
+
+## 🔌 API Documentation
+
+### Available Endpoints
+
+- **GET `/health`** — Health-check endpoint to verify the service is running  
+- **POST `/predict`** — Main ML inference endpoint returning prediction  
+- **GET `/form`** — Simple interactive form for manually submitting applicant data and testing predictions
+- **GET `/docs`** - Application auto-generated docs
+- **GET `/model/info`** - Full details regarding model
+
+### Request Example
+
+    {
+      "rooms": 2,
+      "area": 65.4,
+      "living_area": 46.7,
+      "kitchen_area": 10.6,
+      "floor": 7,
+      "total_floors": 12,
+      "ceiling_height": 3,
+      "building_age": 1,
+      "district": "Yesil",
+      "latitude": 51.1694,
+      "longitude": 71.4491,
+      "house_type": "monolithic",
+      "condition": "good",
+      "parking": "public_parking",
+      "furniture": "unfurnished",
+      "bathroom_type": "multiple",
+      "bathroom_count": 2,
+      "balcony_type": "multiple",
+      "security_high": 1,
+      "wooden_floor": 0,
+      "has_window_grills": 0,
+      "floor_relative": 0.583333,
+      "living_ratio": 0.714067,
+      "kitchen_ratio": 0.16208
+    }
+
+### Response Example
+
+    {
+        "predicted_price_usd": 71796.32,
+        "price_per_m2": 1097.8,
+        "confidence_interval_95": {
+            "lower": 64975.67,
+            "upper": 78616.98,
+            "margin_percent": 9.5
+        },
+        "price_category": "mid-range"
+    }
+--
+
 ## 🤝 Contributing
 
 This is an educational project demonstrating ML best practices. Suggestions for improvements welcome!
@@ -376,156 +455,3 @@ MIT License - feel free to use for learning and non-commercial purposes.
 **Project Status:** ✅ Complete - Model trained and evaluated
 
 **Last Updated:** January 2026
-
-------------------------------------------------------------------------
-
-## 🤖 Modeling Approach
-
-### 1. Data Split
-
--   60% Train
--   20% Validation
--   20% Test
-
-### 2. Models Evaluated
-
-| Model                 | Pros                                     | Cons                             |
-|-----------------------|------------------------------------------|----------------------------------|
-| Logistic Regression   | Interpretable                            | Underfits nonlinear relations    |
-| Decision Tree         | Captures interactions                    | Overfits easily                  |
-| Random Forest (Selected) | Best accuracy, robust, handles mixed features | Larger model size                |
-
-
-**Random Forest chosen** for stable performance and good probability
-calibration.
-
-### 3. Threshold Optimization
-
-A sweep from 0.1--0.8 determined the F1-maximizing threshold.
-Stored along with:
-
--   RandomForest model
--   DictVectorizer
--   Final probability cutoff
-
-Saved in: `midterm_model.bin`
-
-### 4. Final Performance
-
-| Metric     | Score   |
-|------------|---------|
-| Accuracy   | ~0.9311 |
-| Precision  | ~0.93   |
-| Recall     | ~0.93   |
-| F1-Score   | ~0.8374 |
-| AUC-ROC    | ~0.9748 |
-
-------------------------------------------------------------------------
-
-## 🏛️ API Service Architecture
-
-```mermaid
-graph LR
-    A[Client Sends JSON Request] --> B[FastAPI Endpoint /predict]
-    B --> C[ModelPredictor Class - predict.py]
-    C --> D[Load Model + DictVectorizer]
-    D --> E[Compute Probability]
-    E --> F[Apply Tuned Threshold]
-    F --> G[Return JSON Response]
-```
-
-------------------------------------------------------------------------
-
-## 🚀 Running the Project
-
-### 1. Run with Docker (recommended)
-
-**Using docker-compose**
-
-    docker-compose up -d
-
-**Manual build/run**
-
-    docker build -t loan-default-api .
-    docker run -p 9696:9696 loan-default-api
-
-API runs at: `http://localhost:9696`
-
-### 2. Run Locally
-
-    python -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    uvicorn serve:app --host 0.0.0.0 --port 9696
-
-------------------------------------------------------------------------
-
-## 🌐 Cloud Deployment (DigitalOcean)
-
-The API is fully deployed and accessible online via DigitalOcean’s App Platform:
-
-**Live Application:**  
-**👉 https://loan-default-api-app-hrbsh.ondigitalocean.app/**
-
-This cloud-hosted version exposes the same production-ready machine learning model used locally, allowing real-time inference directly over the internet.
-
-**Interactive Demo Form:**
-**👉 https://loan-default-api-app-hrbsh.ondigitalocean.app/form**
-
-### Available Endpoints
-
-- **GET `/health`** — Health-check endpoint to verify the service is running  
-- **POST `/predict`** — Main ML inference endpoint returning default probability and prediction  
-- **GET `/form`** — Simple interactive form for manually submitting applicant data and testing predictions
-
-## 🔌 API Documentation
-
-### Endpoints
-
-| Method | Endpoint | Description        |
-|--------|----------|--------------------|
-| GET    | /        | Welcome message    |
-| GET    | /health  | Health check       |
-| POST   | /predict | Generate prediction |
-
-### Request Example
-
-    {
-      "person_age": 35,
-      "person_gender": "male",
-      "person_education": "Bachelor",
-      "person_income": 75000,
-      "person_emp_exp": 10,
-      "person_home_ownership": "RENT",
-      "loan_amnt": 15000,
-      "loan_intent": "EDUCATION",
-      "loan_int_rate": 5.5,
-      "loan_percent_income": 0.2,
-      "cb_person_cred_hist_length": 8,
-      "credit_score": 720,
-      "previous_loan_defaults_on_file": 0
-    }
-
-### Response Example
-
-    {
-      "prediction": false,
-      "probability": 0.1234,
-      "threshold": 0.34,
-      "prediction_class": 0
-    }
-
-------------------------------------------------------------------------
-
-## ⚠️ Limitations
-
--   Trained on public dataset → may not reflect real-world patterns
--   No fairness/bias review
--   No CI/CD retraining automation
-
-------------------------------------------------------------------------
-
-## 🛠 Next Steps
-
--   Feature importance stability checks
--   Stronger Pydantic input schemas

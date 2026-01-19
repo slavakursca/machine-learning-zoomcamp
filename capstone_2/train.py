@@ -89,20 +89,6 @@ print("\nTraining XGBoost with optimal hyperparameters...")
 print("-" * 70)
 
 # Optimal parameters from Optuna tuning (RMSE-optimized)
-# optimal_params = {
-#     'n_estimators': 1750,
-#     'learning_rate': 0.036292477535162564,
-#     'max_depth': 6,
-#     'min_child_weight': 5,
-#     'subsample': 0.9442231627495341,
-#     'colsample_bytree': 0.6075430935454081,
-#     'reg_alpha': 0.0074516636909294385,
-#     'reg_lambda': 8.478313903382128e-07,
-#     'gamma': 2.3516099974979833e-05,
-#     'random_state': 42,
-#     'tree_method': 'hist',
-#     'early_stopping_rounds': 50
-# }
 optimal_params = {
     "colsample_bytree": 0.6174243195963651,
     "gamma": 0.00029194695300892537,

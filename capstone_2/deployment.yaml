@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astana-price-prediction
+  labels:
+    app: astana-price-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astana-price-api
+  template:
+    metadata:
+      labels:
+        app: astana-price-api
+    spec:
+      containers:
+      - name: astana-price-api
+        image: astana-price-api:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        ports:
+        - containerPort: 9696
+          name: http
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 9696
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 9696
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5

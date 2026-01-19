@@ -351,6 +351,136 @@ API runs at: `http://localhost:9696`
 
 ------------------------------------------------------------------------
 
+### Kubernetes (Recommended for Scale)
+
+Deploy to Kubernetes cluster for high availability and scalability.
+
+**Requirements:**
+- Kubernetes cluster (minikube, kind, or cloud provider)
+- kubectl configured
+- Docker (for building image)
+
+#### Local Kubernetes with Minikube
+
+**Step 1: Install Minikube**
+
+```bash
+# macOS
+brew install minikube
+
+# Linux
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# Windows (using Chocolatey)
+choco install minikube
+```
+
+**Step 2: Start Minikube**
+
+```bash
+# Start cluster
+minikube start
+
+# Verify cluster
+kubectl cluster-info
+kubectl get nodes
+```
+
+**Step 3: Build Docker Image in Minikube**
+
+```bash
+# Use minikube's Docker daemon
+eval $(minikube docker-env)
+
+# Build image
+docker build -t astana-price-api:latest .
+
+# Verify image is available
+docker images | grep astana-price-api
+```
+
+**Step 4: Deploy to Kubernetes**
+
+```bash
+# Apply deployment and service
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+# Check deployment status
+kubectl get deployments
+kubectl get pods
+kubectl get services
+
+# Wait for pod to be ready
+kubectl wait --for=condition=ready pod -l app=astana-price-api --timeout=60s
+```
+
+**Step 5: Access the Service**
+
+```bash
+# Get service URL (for minikube)
+minikube service astana-price-api --url
+
+# Or use port forwarding
+kubectl port-forward service/astana-price-api 9696:80
+
+# Access API at: http://localhost:9696
+```
+
+**Useful Commands:**
+
+```bash
+# View logs
+kubectl logs -l app=astana-price-api -f
+
+# Describe pod for debugging
+kubectl describe pod -l app=astana-price-api
+
+# Scale deployment
+kubectl scale deployment astana-price-api --replicas=3
+
+# Delete deployment
+kubectl delete -f deployment.yaml
+kubectl delete -f service.yaml
+```
+
+#### Production Kubernetes (Cloud)
+
+For AWS EKS, GCP GKE, or Azure AKS:
+
+**Step 1: Build and Push Image to Registry**
+
+```bash
+# Tag for your registry
+docker tag astana-price-api:latest <your-registry>/astana-price-api:v1.0.0
+
+# Push to registry
+docker push <your-registry>/astana-price-api:v1.0.0
+```
+
+**Step 2: Update deployment.yaml**
+
+```yaml
+# Change image reference
+spec:
+  containers:
+  - name: astana-price-api
+    image: <your-registry>/astana-price-api:v1.0.0
+    imagePullPolicy: Always  # Change to Always for cloud
+```
+
+**Step 3: Deploy**
+
+```bash
+# Apply configurations
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+# Get external IP (may take a few minutes)
+kubectl get service astana-price-api -w
+```
+
 ## 🔌 API Documentation
 
 ### Available Endpoints
@@ -424,8 +554,6 @@ API runs at: `http://localhost:9696`
 - [ ] Automated retraining pipeline
 
 **Production Deployment:**
-- [ ] FastAPI inference service
-- [ ] Docker containerization
 - [ ] Model versioning with MLflow
 - [ ] A/B testing framework
 - [ ] Real-time price monitoring dashboard

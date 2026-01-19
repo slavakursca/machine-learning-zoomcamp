@@ -310,42 +310,6 @@ Run `train-model.ipynb` to:
 - **Optimization:** optuna
 - **Visualization:** matplotlib, seaborn (in notebooks)
 
----
-
-## ⚠️ Limitations
-
-- **Data Recency:** Model trained on January 2026 snapshot; requires retraining for market changes
-- **Geographic Scope:** Limited to Astana, Kazakhstan
-- **Feature Completeness:** Some listings had missing amenity details
-- **Market Dynamics:** Does not account for seasonal variations or economic events
-- **External Factors:** Excludes macro-economic indicators (interest rates, inflation)
-
----
-
-## 🎯 Future Improvements
-
-**Model Enhancements:**
-- [ ] Time-series features (listing duration, price changes)
-- [ ] External data (proximity to metro, schools, parks)
-- [ ] Ensemble stacking of top models
-- [ ] Deep learning with embeddings for text descriptions
-- [ ] Automated retraining pipeline
-
-**Production Deployment:**
-- [ ] FastAPI inference service
-- [ ] Docker containerization
-- [ ] Model versioning with MLflow
-- [ ] A/B testing framework
-- [ ] Real-time price monitoring dashboard
-
-**Feature Engineering:**
-- [ ] Neighborhood price trends
-- [ ] Developer reputation scores
-- [ ] Walkability scores
-- [ ] Public transport accessibility metrics
-
----
-
 ## 📝 Model Selection Rationale
 
 **Why XGBoost?**
@@ -438,7 +402,41 @@ API runs at: `http://localhost:9696`
         },
         "price_category": "mid-range"
     }
---
+---
+
+## ⚠️ Limitations
+
+- **Data Recency:** Model trained on January 2026 snapshot; requires retraining for market changes
+- **Geographic Scope:** Limited to Astana, Kazakhstan
+- **Feature Completeness:** Some listings had missing amenity details
+- **Market Dynamics:** Does not account for seasonal variations or economic events
+- **External Factors:** Excludes macro-economic indicators (interest rates, inflation)
+
+---
+
+## 🎯 Future Improvements
+
+**Model Enhancements:**
+- [ ] Time-series features (listing duration, price changes)
+- [ ] External data (proximity to metro, schools, parks)
+- [ ] Ensemble stacking of top models
+- [ ] Deep learning with embeddings for text descriptions
+- [ ] Automated retraining pipeline
+
+**Production Deployment:**
+- [ ] FastAPI inference service
+- [ ] Docker containerization
+- [ ] Model versioning with MLflow
+- [ ] A/B testing framework
+- [ ] Real-time price monitoring dashboard
+
+**Feature Engineering:**
+- [ ] Neighborhood price trends
+- [ ] Developer reputation scores
+- [ ] Walkability scores
+- [ ] Public transport accessibility metrics
+
+---
 
 ## 🤝 Contributing
 

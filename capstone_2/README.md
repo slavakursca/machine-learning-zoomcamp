@@ -24,8 +24,8 @@ The model predicts apartment prices in USD based on property characteristics, lo
 
 ```bash
 # Clone repository
-git clone <your-repo-url>
-cd astana-apartment-prediction
+git clone git@github.com:slavakursca/machine-learning-zoomcamp.git
+cd capstone_2
 
 # Run with Docker Compose (recommended)
 docker-compose up -d
@@ -53,7 +53,6 @@ open http://localhost:9696/form
 - [Deployment & API Usage](#-deployment--api-usage)
 - [API Documentation](#-api-documentation)
 - [Performance Metrics](#-performance-metrics)
-- [Troubleshooting](#-troubleshooting)
 - [Limitations](#%EF%B8%8F-limitations--considerations)
 - [Future Improvements](#-roadmap)
 
@@ -256,18 +255,18 @@ Three gradient boosting algorithms evaluated:
 
 **Optimal Hyperparameters:**
 ```python
-{
-    "colsample_bytree": 0.6174,
-    "gamma": 0.0003,
-    "learning_rate": 0.0251,
+optimal_params = {
+    "colsample_bytree": 0.6174243195963651,
+    "gamma": 0.00029194695300892537,
+    "learning_rate": 0.025072744653519028,
     "max_depth": 8,
     "min_child_weight": 3,
     "n_estimators": 2000,
-    "reg_alpha": 0.0173,
-    "reg_lambda": 0.0755,
-    "subsample": 0.8978,
+    "reg_alpha": 0.017313707755127073,
+    "reg_lambda": 0.07549915003331413,
+    "subsample": 0.8978305041846237,
     "random_state": 42,
-    "tree_method": "hist",
+    "tree_method": 'hist',
     "early_stopping_rounds": 50
 }
 ```
@@ -696,74 +695,6 @@ print(response.json())
 - Model is loaded once at startup and kept in memory
 - No GPU required (CPU inference is sufficient)
 - Scales horizontally with Kubernetes replicas
-
----
-
-## 🔧 Troubleshooting
-
-### Docker Issues
-
-**Build fails:**
-```bash
-# Check Docker daemon is running
-docker info
-
-# Check disk space
-docker system df
-
-# Clean up if needed
-docker system prune -a
-```
-
-**Container won't start:**
-```bash
-# Check logs
-docker logs <container-id>
-
-# Verify port is available
-lsof -i :9696  # macOS/Linux
-netstat -ano | findstr :9696  # Windows
-```
-
-### Kubernetes Issues
-
-**Pod won't start:**
-```bash
-# Describe pod for details
-kubectl describe pod -l app=astana-price-api
-
-# Check logs
-kubectl logs -l app=astana-price-api
-
-# Common issues:
-# - Image not found: rebuild with eval $(minikube docker-env)
-# - Resource limits: check cluster capacity
-```
-
-**Can't access service:**
-```bash
-# Check service is running
-kubectl get services
-
-# Verify pod is ready
-kubectl get pods
-
-# Use port-forward as fallback
-kubectl port-forward service/astana-price-api 9696:80
-```
-
-### Model Issues
-
-**Predictions seem incorrect:**
-- Verify input features match training schema (check `/model/info`)
-- Ensure numeric values are in expected ranges
-- Check categorical values use exact strings (e.g., "monolithic" not "Monolithic")
-- Review training data distribution for outliers
-
-**High latency:**
-- Check if model file is corrupted (re-download or retrain)
-- Verify sufficient memory available (needs ~200MB)
-- Consider deploying multiple replicas with load balancer
 
 ---
 

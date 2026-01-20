@@ -24,7 +24,7 @@ The model predicts apartment prices in USD based on property characteristics, lo
 
 ```bash
 # Clone repository
-git clone git@github.com:slavakursca/machine-learning-zoomcamp.git
+git clone https://github.com/slavakursca/machine-learning-zoomcamp.git
 cd capstone_2
 
 # Run with Docker Compose (recommended)
@@ -243,7 +243,7 @@ Three gradient boosting algorithms evaluated:
 
 ## 📈 Model Performance
 
-### 🎯 Final Model: XGBoost (RMSE-Optimized)
+### 🎯 Final Model: XGBoost (MAPE-Optimized)
 
 **Test Set Performance:**
 

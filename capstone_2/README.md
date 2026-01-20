@@ -41,7 +41,7 @@ open http://localhost:9696/form
 
 OR 
 
-**Try live app demo using form:** `https://stan25-astana-price-api.hf.space/form`
+**Try live app demo using form:** https://stan25-astana-price-api.hf.space/form
 
 ---
 
@@ -549,8 +549,8 @@ kubectl get service astana-price-api -w
 Application is fully deployed and accessible online via HuggingFace Spaces:
 
 **Live Application:**  
-**👉 https://stan25-ml-zoomcamp-room-classifier.hf.space/ **
-**👉 https://stan25-ml-zoomcamp-room-classifier.hf.space/form - UI Form**
+**👉 https://stan25-astana-price-api.hf.space/**
+**👉 https://stan25-astana-price-api.hf.space/form - UI Form**
 
 This cloud-hosted version exposes the same production-ready machine learning model used locally, allowing predicting price in real-time directly over the internet.
 
